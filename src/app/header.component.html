@@ -14,14 +14,19 @@
             >Contacts</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown" [ngClass]="{ open: isUserDropdownOpen }"
+          <li class="dropdown"
+          [ngClass]="{ open: isUserDropdownOpen }" appDropdown
           >
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">User <span class="caret"></span></a>
-          </li>
-          <ul class="dropdown-menu">
-            <li><a href="#">Save Data</a></li>
-            <li><a href="#">Fetch Data</a></li>
+            <a href="#" class="dropdown-toggle" (click)="toggleUserDropdown()"
+            role="button">User <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Logout</a></li>
           </ul>
+        </li>
+
         </ul>
       </div>
   </div>
