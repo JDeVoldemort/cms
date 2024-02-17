@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 
 
 @Component({
@@ -15,10 +15,10 @@ export class HeaderComponent {
   toggleNavbar() {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
-  @Output() selectedFeatureEvent = new EventEmitter<string>();
+  // @Output() selectedFeatureEvent = new EventEmitter<string>();
 
-  onSelected(selectedEvent: string) {
-    this.selectedFeatureEvent.emit(selectedEvent);
+  // onSelected(selectedEvent: string) {
+  //   this.selectedFeatureEvent.emit(selectedEvent);
 
-}
+// }
 }

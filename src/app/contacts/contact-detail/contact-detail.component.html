@@ -11,8 +11,8 @@
           style="max-height: 70px;">
       </div>
       <div class="col text-right">
-        <button class="btn btn-primary">Edit</button>
-        <button class="btn btn-danger">Delete</button>
+        <button class="btn btn-primary"[routerLink]="['edit']" >Edit</button>
+        <button class="btn btn-danger" (click)="onDelete()" >Delete</button>
       </div>
     </div>
   </div>

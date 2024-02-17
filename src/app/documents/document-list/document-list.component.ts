@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Document } from '../document.model';
 import { DocumentsService } from '../documents.service';
 
@@ -10,7 +11,9 @@ import { DocumentsService } from '../documents.service';
 export class DocumentListComponent {
   documents: Document[] = [];
     // @Output() selectedDocumentEvent = new EventEmitter();
-    constructor(private documentService: DocumentsService) {}
+    constructor(private documentService: DocumentsService,
+      private router: Router,
+      private route: ActivatedRoute ) {}
     ngOnInit(): void {
       this.documents = this.documentService.getDocuments();
     }
@@ -19,7 +22,7 @@ export class DocumentListComponent {
     //   this.selectedDocumentEvent.emit(document);
     // }
 
-    onSelectedDocument(document: Document) {
-      this.documentService.documentSelectedEvent.emit(document);
-    }
+    // onSelectedDocument(document: Document) {
+    //   this.documentService.documentSelectedEvent.emit(document);
+    // }
 }
