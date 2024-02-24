@@ -31,7 +31,9 @@ onSelected(contact: Contact) {
         }
       );
   }
-
+  ngOnDestroy(): void {
+    this.subsciption.unsubscribe();
+  }
   // onContactSelected(contact: Contact) {
   //   this.contactsService.contactSelectedEvent.emit(contact);
   // }
