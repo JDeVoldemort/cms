@@ -1,21 +1,34 @@
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="row">
-      <div class="col-xs-6">
-
-      <h1 class="panel-title title-left">Contacts</h1>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <a
+          [routerLink]="['new']"
+          routerLinkActive="active"
+          class="btn btn-success pull-right"
+          type="button"
+          >New Contact</a
+        >
+        <h4><strong>Contacts</strong></h4>
       </div>
-      <div class="col-xs-6">
-    <button class="btn btn-success" [routerLink]="['new']" >New Contact</button>
+      <div class="panel-body">
+        <div cdkDropList
+        [cdkDropListData]="contacts">
+        <div
+        cdkDrag
+        *ngFor="let contact of contacts"
+        [cdkDragData]="contact">
+            <cms-contact-item [contact]="contact"></cms-contact-item>
+
+        <!-- <cms-contact-item
+          *ngFor="let contact of contacts"
+          [contact]="contact"
+          dnd-draggable
+          [dragEnabled]="true"
+          [dragData]="contact"
+          [dropZones]="['contactGroup']"
+        ></cms-contact-item> -->
       </div>
     </div>
   </div>
-<div class="panel-body">
-  <cms-contact-item
-  *ngFor="let contact of contacts"
-  [contact]="contact"
-  >
-
-</cms-contact-item>
-  </div>
-    <!-- <cms-contacts></cms-contacts> -->
+</div>
