@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../app/header.component';
 import { AppComponent } from './app.component';
@@ -10,6 +11,7 @@ import { ContactDetailComponent } from './contacts/contact-detail/contact-detail
 import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
 import { ContactItemComponent } from './contacts/contact-item/contact-item.component';
 import { ContactListComponent } from './contacts/contact-list/contact-list.component';
+import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
 import { ContactsComponent } from './contacts/contacts.component';
 import { ContactsService } from './contacts/contacts.service';
 import { DocumentDetailComponent } from './documents/document-detail/document-detail.component';
@@ -24,6 +26,7 @@ import { MessageListComponent } from './messages/message-list/message-list.compo
 import { MessagesService } from './messages/messages.service';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { WindRefService } from './wind-ref.service';
+
 
 
 @NgModule({
@@ -43,13 +46,15 @@ import { WindRefService } from './wind-ref.service';
     MessageListComponent,
     DropdownDirective,
     DocumentEditComponent,
-    ContactEditComponent
+    ContactEditComponent,
+    ContactsFilterPipe,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     CmsRoutingModule,
-    DragDropModule
+    DragDropModule,
+    HttpClientModule
     // DndModule.forRoot()
   ],
   providers: [ContactsService, DocumentsService, WindRefService, MessagesService],

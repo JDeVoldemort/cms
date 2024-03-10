@@ -44,6 +44,8 @@ ngOnDestroy() {
   OnCancel() {
     this.term = '';
   }
-
+search(value: string) {
+  this.term = value;
+}
 
 }

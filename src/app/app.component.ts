@@ -8,7 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'cms';
+  loadedFeature = 'contacts';
   selectedFeature: string;
+
+  onNavigate(feature: string) {
+    this.loadedFeature = feature;
+  }
 
   // switchView(selectedFeature: string) {
   //   if(
