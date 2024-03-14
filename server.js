@@ -1,10 +1,10 @@
 // Get dependencies
 let express = require('express');
 let path = require('path');
-// let http = require('http');
+let http = require('http');
 // let bodyParser = require('body-parser');
-// let cookieParser = require('cookie-parser');
-// let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
 
 // import the routing file to handle the default (index) route
 let index = require('./server/routes/app');
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: false
 }));
-// app.use(cookieParser());
+app.use(cookieParser());
 
 app.use(logger('dev')); // Tell express to use the Morgan logger
 
@@ -47,7 +47,7 @@ app.use('/', index);
 
 // Tell express to map all other non-defined routes back to the index page
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/cms/index.html'));
+  res.sendFile(path.join(__dirname, 'dist/cms/browser/index.html'));
 });
 
 // Define the port address and tell express to use this port
