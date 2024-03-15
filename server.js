@@ -38,16 +38,25 @@ app.use((req, res, next) => {
 
 // Tell express to use the specified director as the
 // root directory for your web site
-app.use(express.static(path.join(__dirname, 'dist/cms')));
+app.use(express.static(path.join(__dirname, 'dist/cms/browser')));
 
 // Tell express to map the default route ('/') to the index route
 app.use('/', index);
 
 // ... ADD YOUR CODE TO MAP YOUR URL'S TO ROUTING FILES HERE ...
+const index = require('./server/routes/app');
+const messageRoutes = require('./server/routes/messages');
+const contactRoutes = require('./server/routes/contacts');
+const docunmentRoutes = require('./server/routes/documents');
+
+app.use('/', index);
+app.use('/messages', messageRoutes);
+app.use('/contacts', contactRoutes);
+app.use('/documents', docunmentRoutes);
 
 // Tell express to map all other non-defined routes back to the index page
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/cms/browser/index.html'));
+  res.sendFile(path.join(__dirname, './dist/cms/browser/index.html'));
 });
 
 // Define the port address and tell express to use this port
