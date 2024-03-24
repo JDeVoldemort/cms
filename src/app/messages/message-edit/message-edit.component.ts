@@ -12,7 +12,7 @@ export class MessageEditComponent {
   @ViewChild('subject') subject: ElementRef;
   @ViewChild('msgText') msgText: ElementRef;
 
-  currentSender='JD';
+  currentSender='1';
 
   constructor(private messagesService: MessagesService ) { }
   ngOnInit(): void {

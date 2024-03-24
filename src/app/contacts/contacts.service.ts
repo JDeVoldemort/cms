@@ -54,7 +54,7 @@ export class ContactsService implements OnInit{
 
 
   getContact(id: string){
-    return this.contacts[id];
+    return this.contacts.find(contact => contact.id === id);
   }
 
   getMaxId(): number {

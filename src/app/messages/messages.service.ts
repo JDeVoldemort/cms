@@ -15,6 +15,7 @@ export class MessagesService {
   maxMessageId: number;
 
   constructor(private httpClient: HttpClient) {
+    this.maxMessageId = this.getMaxId();
     // this.messages = MOCKMESSAGES;
 
   }
@@ -66,7 +67,7 @@ export class MessagesService {
         this.messages = messages;
         this.maxMessageId = this.getMaxId();
         this.sortMessages();
-        this.messageListChangedEvent.next(this.messages.slice());
+        this.messageListChangedEvent.next(...[this.messages.slice()]);
       });
 
     return this.messages.slice();
@@ -134,18 +135,18 @@ export class MessagesService {
   }
   storeMessages(){
     this.httpClient
-    .put(this.jsonURL, JSON.stringify(this.messages), {
-      headers: new HttpHeaders({
-        'X-Master-Key': '$2a$10$DAYHZ66bh77uid.MiZyKc.NOdbCymJWpmExoo3kpxYPojExjDxIt.',
-        'Content-Type': 'application/json'
+    .post(this.jsonURL, JSON.stringify(this.messages), {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
       })
-    })
     .subscribe(() => {
+      this.sortMessages;
       this.messageListChangedEvent.next(this.messages.slice());
+
     });
   }
   getMessage(id: string): Message {
     for (let message of this.messages) {
+      console.log(message.id);
       if (message.id === id) {
         return message;
       }
@@ -154,7 +155,9 @@ export class MessagesService {
   }
   addMessage(message: Message) {
     this.messages.push(message);
+    console.log(this.messages);
     // this.messageChangeEvent.emit(this.messages.slice());
+
     this.storeMessages();
   }
   getMaxId(): number {

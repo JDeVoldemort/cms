@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Contact } from '../../contacts/contact.model';
 import { ContactsService } from '../../contacts/contacts.service';
 import { Message } from '../message.model';
-
 
 
 @Component({
@@ -11,12 +11,31 @@ import { Message } from '../message.model';
   styleUrl: './message-item.component.css'
 })
 export class MessageItemComponent implements OnInit{
-  @Input() message: Message;
+  contact: Contact;
+  contacts: Contact[];
+  subsciption: Subscription;
+    @Input() message: Message;
   messageSender: string;
-  constructor(private contactsService: ContactsService) {}
-  ngOnInit() {
+  constructor(private contactsService: ContactsService) {
+    contact: Contact;
 
-     const contact: Contact = this.contactsService.getContact(this.message.sender);
+  }
+  ngOnInit() {
+    this.contacts = this.contactsService.getContacts();
+    this.subsciption = this.contactsService.contactListChangedEvent
+    .subscribe(
+      (contacts: Contact[]) => {
+        this.contacts = contacts;
+      }
+    );
+
+    // let senderid = this.message.sender;
+// let sender = toString(senderid);
+     const contact = this.contactsService.getContact(this.message.sender);
+     console.log(contact);
+     console.log(this.message);
+     console.log(this.message.sender);
+     console.log(contact);
      this.messageSender = contact.name;
   }
 }
