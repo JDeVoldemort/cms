@@ -29,15 +29,25 @@ export class DocumentEditComponent implements OnInit {
             this.editMode = false;
             return;
           }
-          this.originalDocument = this.documentService.getDocument(this.id);
-          if (this.originalDocument === undefined || this.originalDocument === null) {
-            this.editMode = false;
-            return;
-          }
-          this.editMode = true;
-          this.document = JSON.parse(JSON.stringify(this.originalDocument));
-        });
-  }
+          // this.documentService.getDocument(this.id).subscribe((document: Document) => {
+          this.documentService.getDocument(this.id)
+          if (this.documentService.getDocument(this.id) === null) {
+              this.editMode = false;
+              return;
+            } else {
+
+            this.editMode = true;
+            this.document = JSON.parse(JSON.stringify(this.originalDocument));
+          }});
+        //   this.originalDocument = this.documentService.getDocument(this.id);
+        //   if (this.originalDocument === undefined || this.originalDocument === null) {
+        //     // this.editMode = false;
+        //     return;
+        //   }
+        //   this.editMode = true;
+        //   this.document = JSON.parse(JSON.stringify(this.originalDocument));
+        // });
+}
 
   onSubmit(form: NgForm) {
     let value = form.value;

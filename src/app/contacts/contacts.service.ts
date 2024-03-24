@@ -9,126 +9,119 @@ import { Contact } from './contact.model';
 export class ContactsService implements OnInit{
   @Output() contactSelectedEvent = new EventEmitter<Contact>();
   @Output() contactListChangedEvent = new Subject<Contact[]>();
-  jsonURL = 'https://api.jsonbin.io/v3/b/65ed63501f5677401f3b5d9b';
+  // jsonURL = 'https://api.jsonbin.io/v3/b/65ed63501f5677401f3b5d9b';
   // jsonURL = 'https://api.jsonbin.io/v3/b/65ed19a6dc74654018b0b407';
-  headers = new HttpHeaders({'X-Master-Key': '$2a$10$DAYHZ66bh77uid.MiZyKc.NOdbCymJWpmExoo3kpxYPojExjDxIt.'});
+  jsonURL = 'http://localhost:3000/contacts';
+  // headers = new HttpHeaders({'X-Master-Key': '$2a$10$DAYHZ66bh77uid.MiZyKc.NOdbCymJWpmExoo3kpxYPojExjDxIt.'});
 
-  constructor(private httpClient: HttpClient) {
-    // this.contacts = MOCKCONTACTS;
-    // this.maxContactId = this.getMaxId();
-   }
-  private contacts: Contact[] = [];
-  private maxContactId: number;
+  contacts: Contact[] = [];
+  maxContactId: number;
+  contactsListClone: Contact[]
 
-  ngOnInit() {
+  constructor(private httpClient : HttpClient) {
   }
+  ngOnInit(){
+
+  }
+
   getContacts() {
     this.httpClient
-      .get<Contact[]>(this.jsonURL, {
-        headers: new HttpHeaders({
-          'X-Master-Key': '$2a$10$DAYHZ66bh77uid.MiZyKc.NOdbCymJWpmExoo3kpxYPojExjDxIt.',
-          'responseType': 'json'
-        })
-      })
-      .subscribe((response: any) => {
-        this.contacts = response.record.contacts;
-        console.log(this.contacts);
+      .get<Contact[]>(this.jsonURL)
+      .subscribe((contacts: Contact[]) => {
+        this.contacts = contacts;
         this.maxContactId = this.getMaxId();
         this.sortContacts();
         this.contactListChangedEvent.next(this.contacts.slice());
+      });
 
-      },
-      (error: any) => {
-        if (error.status === 404) {
-          // Handle 404 error
-        } else if (error.status === 500) {
-          // Handle 500 error
-        } else {
-          // Handle other errors
-        console.log(error);
-        }
+    return this.contacts.slice();
+  }
 
-      }
-      );
-
-
-
-      return this.contacts.slice();
-    }
   private sortContacts(){
     this.contacts.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-    storeContacts(){
-      this.httpClient
-      .put(this.jsonURL, JSON.stringify(this.contacts), {
-        headers: new HttpHeaders({
-          'X-Master-Key': '$2a$10$DAYHZ66bh77uid.MiZyKc.NOdbCymJWpmExoo3kpxYPojExjDxIt.',
-          'Content-Type': 'application/json'
+  storeContacts(){
+    this.httpClient
+    .put(this.jsonURL, JSON.stringify(this.contacts), {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+    })
+    .subscribe(() =>{
+      this.sortContacts;
+      this.contactListChangedEvent.next(this.contacts.slice());
+    });
+  }
+
+
+  getContact(id: string){
+    return this.contacts.find(contact => contact.id === id);
+  }
+
+  getMaxId(): number {
+    let maxId = 0;
+    for (let contact of this.contacts){
+      let currentId =+ maxId;
+      if(currentId > maxId){
+        maxId = currentId;
+      }
+    }
+    return maxId;
+
+  }
+
+  addContact(newContact: Contact){
+    if (!newContact) return;
+    newContact.id = '';
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.httpClient
+      .post<{ message: string; contact: Contact }>(
+        this.jsonURL,
+        newContact,
+        { headers: headers }).subscribe({
+          next: (res) => {
+            console.log(res.message);
+            this.contacts.push(res.contact);
+            this.sortContacts();
+          }
         })
-      })
-    }
 
-
-  getContact(id: string): Contact | null {
-    return this.contacts.find((c) => c.id === id);
   }
 
-getMaxId(): number {
-  let maxId = 0;
-  for (const contact of this.contacts) {
-    const currentId = parseInt(contact.id, 10);
-    if (currentId > maxId) {
-      maxId = currentId;
-    }
-  }
-  return maxId;
-}
 
+  updateContact(originalContact: Contact, newContact: Contact){
+    if (!originalContact || !newContact){
+      return
+    }
+    let pos = this.contacts.indexOf(originalContact)
+    if (pos < 0 ){
+      return
+    }
+
+    newContact.id = originalContact.id
+    this.contacts[pos] = newContact
+    this.storeContacts();
+
+  }
 
   deleteContact(contact: Contact) {
-    if (contact === null || contact === undefined) {
+    if (!contact) {
       return;
     }
     const pos = this.contacts.indexOf(contact);
-    if (pos < 0) {
-      return;
-    }
-    this.contacts.splice(pos, 1);
-    // this.contactListChangedEvent.next(this.contacts.slice());
-    this.storeContacts();
-  }
 
-  addContact(newContact: Contact) {
-    if (newContact === null) {
-      return;
-    }
-
-    this.maxContactId++;
-    newContact.id = String(this.maxContactId);
-    this.contacts.push(newContact);
-    const contactsListClone = this.contacts.slice();
-    // this.contactListChangedEvent.next(contactsListClone);
-    this.storeContacts();
-  }
-
-  updateContact(originalContact: Contact,
-            newContact: Contact) {
-    if (originalContact === null || newContact === null
-      || originalContact === undefined || newContact === undefined) {
-      return;
-    }
-
-    newContact.id = originalContact.id;
-    const pos = this.contacts.indexOf(originalContact);
     if (pos < 0) {
       return;
     }
 
-    this.contacts[pos] = newContact;
-    const contactsListClone = this.contacts.slice();
-    // this.contactListChangedEvent.next(contactsListClone);
-    this.storeContacts();
+    this.httpClient.delete(`${this.jsonURL}/${contact.id}`)
+      .subscribe(
+        (response: Response) => {
+          this.contacts.splice(pos, 1);
+          this.sortContacts();
+        }
+      )
+
   }
 
 

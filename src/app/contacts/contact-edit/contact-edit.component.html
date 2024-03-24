@@ -11,7 +11,7 @@
         <div class="col-sm-12 form-group">
           <label for="email">Email</label>
           <input type="text" id="email" class="form-control required" size="120" max="255" name="email" email
-            [ngModel]="contact?.email" #email="ngModel" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            [ngModel]="contact?.email" #email="ngModel" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$">
           <span class="help-block" *ngIf="!email.valid && email.dirty">Please enter a valid email!</span>
         </div>
 

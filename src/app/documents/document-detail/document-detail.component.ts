@@ -20,6 +20,7 @@ export class DocumentDetailComponent {
   ) {}
   onView() {
     if (this.document.url) {
+
       window.open(this.document.url);
     }
   }
@@ -28,7 +29,19 @@ export class DocumentDetailComponent {
       .subscribe(
         (params: Params ) => {
           this.id = params['id'];
+          // this.document = this.documentService.getDocument(this.id);
+          // this.documentService.getDocument(this.id).subscribe((document: Document) => {
+          //   this.document = document;
+          // });
+          // console.log(this.documentService.getDocument(this.id))
           this.document = this.documentService.getDocument(this.id);
+          return this.documentService.getDocument(this.id);
+          // this.documentService.getDocument(this.id).subscribe((document: Document) => {
+          //   this.document = document;
+          //   console.log(this.document);
+          // });
+          // console.log(this.id);
+
         }
       );
   }
@@ -37,7 +50,7 @@ export class DocumentDetailComponent {
   }
   onDelete() {
     this.documentService.deleteDocument(this.document);
-    this.router.navigate(['/documents'], {relativeTo: this.route});
+    this.router.navigate(['/documents']);
   }
 
 }
