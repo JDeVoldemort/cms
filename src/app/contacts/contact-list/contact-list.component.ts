@@ -27,7 +27,11 @@ onSelected(contact: Contact) {
     this.term = value;
   }
   ngOnInit(): void {
+
     this.contacts = this.contactsService.getContacts();
+    // this.contactsService.getContacts().subscribe((contacts: Contact[]) => {
+    //   this.contacts = contacts;
+    // });
     this.subsciption = this.contactsService.contactListChangedEvent
       .subscribe(
         (contacts: Contact[]) => {
